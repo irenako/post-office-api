@@ -33,4 +33,5 @@ Route::controller(DeliveryController::class)->group(static function() {
     Route::get('deliveries/{id}', 'show');
     Route::patch('deliveries/{id}', 'update');
     Route::delete('deliveries/{id}', 'destroy');
+    Route::get('deliveries/{id}/packages', 'getAllPackages');
 });

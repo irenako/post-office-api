@@ -11,8 +11,10 @@ class Delivery extends Model
     
     protected $protected = [];
 
+    protected $fillable = ['name', 'abbreviation'];
+
     public function packages()
     {
-        return $this->hasMany(Package::class);
+        return $this->hasMany(Package::class, 'delivery_id', 'id');
     }
 }
