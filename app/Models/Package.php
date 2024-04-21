@@ -11,20 +11,20 @@ class Package extends Model
 
     protected $protected = [];
 
-    protected $fillable = ['senderId', 'recipientId', 'deliveryId', 'addressFrom', 'addressTo', 'status', 'deliveryCost', 'paymentStatus'];
+    protected $fillable = ['sender_id', 'recipient_id', 'delivery_id', 'addressFrom', 'addressTo', 'status', 'deliveryCost', 'paymentStatus'];
 
     public function sender()
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->belongsTo(User::class, 'sender_id', 'id');
     }
 
     public function recipient()
     {
-        return $this->belongsTo(User::class, 'recipient_id');
+        return $this->belongsTo(User::class, 'recipient_id', 'id');
     }
 
     public function deliveryProvider()
     {
-        return $this->belongsTo(Delivery::class, 'deliveryProviderId');
+        return $this->belongsTo(Delivery::class, 'delivery_id');
     }
 }

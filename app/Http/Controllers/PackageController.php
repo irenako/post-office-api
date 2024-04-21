@@ -27,13 +27,15 @@ class PackageController extends Controller
         $recipient = User::findOrFail($request['recipient']);
         $sender = User::findOrFail($request['sender']);
         $delivery = Delivery::findOrFail($request['deliveryId']);
+        var_dump($sender->id);
+        var_dump($recipient->id);
 
         $package = Package::create([
-            'senderId' => $sender->id,
-            'recipientId'  => $recipient->id,
-            'deliveryId' => $delivery->id ,
-            "addressFrom" => $request['addressFrom'],
-            "addressTo" => $request['addressTo'],
+            'sender_id' => $sender->id,
+            'recipient_id' => $recipient->id,
+            'delivery_id' => $delivery->id,
+            'addressFrom' => $request['addressFrom'],
+            'addressTo' => $request['addressTo'],
             'deliveryCost' => $request['cost'],
             'paymentStatus' => $request['paymentStatus'] === 'paid' ? DeliveryCostStatus::PAID->value : DeliveryCostStatus::PENDING->value,
         ]);

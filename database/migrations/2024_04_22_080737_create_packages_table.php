@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('senderId')->constrained('users');
-            $table->foreignId('recipientId')->constrained('users');
-            $table->foreignId('deliveryId')->constrained('deliveries')->default(1);
+            $table->foreignId('sender_id')->constrained('users');
+            $table->foreignId('recipient_id')->constrained('users');
+            $table->foreignId('delivery_id')->constrained('deliveries')->default(1);
             $table->string('addressFrom');
             $table->string('addressTo');
             $table->enum('status', PackageStatus::toArray())->default(PackageStatus::CREATED->value);
@@ -26,7 +26,6 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

@@ -17,12 +17,12 @@ class User extends Model
 
     public function packagesSent()
     {
-        return $this->hasMany(Package::class, 'sender_id');
+        return $this->hasMany(Package::class, 'sender_id', 'id');
     }
 
     public function packagesReceived()
     {
-        return $this->hasMany(Package::class, 'recipient_id');
+        return $this->hasMany(Package::class, 'recipient_id', 'id');
     }
 
 }
