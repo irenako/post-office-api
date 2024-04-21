@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DeliveryCostStatus;
-use App\Enums\PackageStatus;
 use App\Http\Requests\EditPackageRequest;
+use App\Http\Requests\StorePackageRequest;
 use App\Models\Delivery;
 use App\Models\Package;
 use App\Models\User;
@@ -22,13 +22,11 @@ class PackageController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePackageRequest $request)
     {
         $recipient = User::findOrFail($request['recipient']);
         $sender = User::findOrFail($request['sender']);
         $delivery = Delivery::findOrFail($request['deliveryId']);
-        var_dump($sender->id);
-        var_dump($recipient->id);
 
         $package = Package::create([
             'sender_id' => $sender->id,
@@ -36,7 +34,7 @@ class PackageController extends Controller
             'delivery_id' => $delivery->id,
             'addressFrom' => $request['addressFrom'],
             'addressTo' => $request['addressTo'],
-            'deliveryCost' => $request['cost'],
+            'deliveryCost' => $request['deliveryCost'],
             'paymentStatus' => $request['paymentStatus'] === 'paid' ? DeliveryCostStatus::PAID->value : DeliveryCostStatus::PENDING->value,
         ]);
         return new JsonResponse([
@@ -47,7 +45,15 @@ class PackageController extends Controller
 
     public function show(Request $request)
     {
-        $package =  Package::findOrFail($request['id']);
+        $package =  Package::find($request['id']);
+
+        if (!$package) {
+            return new JsonResponse([
+                "status" => 'error',
+                "message" => 'Package not found with id ' . $request['id'],
+            ], 404);
+        }
+        
         return new JsonResponse([
             'data' => [
                 "package" => $package
@@ -57,7 +63,14 @@ class PackageController extends Controller
 
     public function update(EditPackageRequest $request)
     {
-        $package = Package::findOrFail($request->id);
+        $package = Package::find($request->id);
+
+        if (!$package) {
+            return new JsonResponse([
+                "status" => 'error',
+                "message" => 'Package not found with id ' . $request['id'],
+            ], 404);
+        }
 
         if ($request['recipient']) {
             $recipient = User::find($request['recipient']);
@@ -88,7 +101,15 @@ class PackageController extends Controller
 
     public function destroy(Request $request)
     {
-        $package = Package::findOrFail($request['id']);
+        $package = Package::find($request['id']);
+
+        if (!$package) {
+            return new JsonResponse([
+                "status" => 'error',
+                "message" => 'Package not found with id ' . $request['id'],
+            ], 404);
+        }
+        
         $package->delete();
         return new JsonResponse([
             "status" => 'success',

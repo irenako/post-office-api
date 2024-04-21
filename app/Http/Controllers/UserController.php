@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EditUserRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\Package;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -19,13 +20,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         if (User::find($request['phone'])) {
             return response(['message' => 'User already exists'], 409);
         }
 
-        $user = User::create([
+        User::create([
             'firstName' => $request['firstName'],
             'middleName' => $request['middleName'],
             'lastName' => $request['lastName'],
@@ -37,13 +38,21 @@ class UserController extends Controller
 
         return new JsonResponse([
             "status" => 'success',
-            "message" => 'User was created with id ' . $user->id,
+            "message" => 'User was created',
         ]);
     }
 
     public function show(Request $request)
     {
         $user = User::where('id', $request['id'])->first();
+
+        if (!$user) {
+            return new JsonResponse([
+                "status" => 'error',
+                "message" => 'User not found with id ' . $request['id'],
+            ], 404);
+        }
+        
         return new JsonResponse([
             'data' => [
                 'user' => $user
@@ -53,7 +62,14 @@ class UserController extends Controller
 
     public function update(EditUserRequest $request)
     {
-        $user = User::findOrFail($request['phone']);
+        $user = User::find($request['phone']);
+
+        if (!$user) {
+            return new JsonResponse([
+                "status" => 'error',
+                "message" => 'User not found with id ' . $request['id'],
+            ], 404);
+        }
 
         if ($request['firstName']) {
             $user->update(['firstName' => $request['firstName']]);
@@ -83,8 +99,6 @@ class UserController extends Controller
             $user->update(['email' => $request['email']]);
         }
 
-        
-
         return new JsonResponse([
             "status" => 'success',
             "message" => 'User was updated with id ' . $user->id,
@@ -93,8 +107,15 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
-        $User = User::findOrFail($request['phone']);
-        $User->delete();
+        $user = User::find($request['phone']);
+
+        if (!$user) {
+            return new JsonResponse([
+                "status" => 'error',
+                "message" => 'User not found with id ' . $request['id'],
+            ], 404);
+        }
+        $user->delete();
         return new JsonResponse([
             "status" => 'success',
             "message" => 'User was succesfully deleted',
@@ -103,8 +124,14 @@ class UserController extends Controller
 
     public function getAllPackages(Request $request)
     {
-        
-        $user = User::findOrFail($request['phone']);
+        $user = User::find($request['phone']);
+
+        if (!$user) {
+            return new JsonResponse([
+                "status" => 'error',
+                "message" => 'User not found with id ' . $request['id'],
+            ], 404);
+        }
 
         $packagesSent = $user->packagesSent;
         $packagesReceived = $user->packagesReceived;
