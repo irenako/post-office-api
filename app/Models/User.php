@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
+
+    protected $protected = [];
+
+    protected $primaryKey = 'phone';
+
+    public function packagesSent()
+    {
+        return $this->hasMany(Package::class, 'sender_id');
+    }
+
+    public function packagesReceived()
+    {
+        return $this->hasMany(Package::class, 'recipient_id');
+    }
+
 }

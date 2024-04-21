@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('senderId')->constrained('users');
             $table->foreignId('recipientId')->constrained('users');
+            $table->foreignId('deliveryId')->constrained('deliveries')->default(1);
             $table->string('addressFrom');
             $table->string('addressTo');
             $table->enum('status', PackageStatus::toArray())->default(PackageStatus::CREATED->value);

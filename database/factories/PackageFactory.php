@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\DeliveryCostStatus;
 use App\Enums\PackageStatus;
+use App\Models\Delivery;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,6 +23,7 @@ class PackageFactory extends Factory
         return [
             'senderId' => User::factory()->create()->id,
             'recipientId' => User::factory()->create()->id,
+            'recipientId' => Delivery::factory()->create()->id,
             'addressFrom' => $this->faker->address,
             'addressTo' => $this->faker->address,
             'status' => $this->faker->randomElement(PackageStatus::toArray()),
