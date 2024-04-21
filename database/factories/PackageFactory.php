@@ -23,7 +23,7 @@ class PackageFactory extends Factory
         return [
             'senderId' => User::factory()->create()->id,
             'recipientId' => User::factory()->create()->id,
-            'recipientId' => Delivery::factory()->create()->id,
+            'deliveryId' => Delivery::factory()->create()->id,
             'addressFrom' => $this->faker->address,
             'addressTo' => $this->faker->address,
             'status' => $this->faker->randomElement(PackageStatus::toArray()),

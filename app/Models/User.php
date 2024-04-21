@@ -11,6 +11,8 @@ class User extends Model
 
     protected $protected = [];
 
+    protected $fillable = ['firstName', "lastName", 'middleName', 'phone', 'email', 'address', 'city'];
+
     protected $primaryKey = 'phone';
 
     public function packagesSent()
